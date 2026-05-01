@@ -1,11 +1,30 @@
 import React, { useContext, useState } from 'react'
 import {assets} from '../context/assets/frontend_assets/assets'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, Navigate, NavLink } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Navbar = () => {
   const[visible,setvisible] = useState(false)
-  const {setShowSearch,getCartCount} = useContext(ShopContext)
+  const {setShowSearch,getCartCount,backend,setToken,token,setCartitems,navigate} = useContext(ShopContext)
+
+  const logout = async()=>{
+    try {
+         let response = await axios.post(`${backend}/api/user/logout`,{},{withCredentials:true})
+    if(response.data.success){
+        toast.success(response.data.message)
+         setToken(false)
+        setCartitems({})
+        navigate("/login")
+       }
+    } catch (error) {
+        console.log(error)
+        toast.error(error)
+    }
+    
+  }
+
   return (
     <>
        <div className='flex items-center justify-between py-5 px-3 md:px-10 font-medium'>
@@ -36,13 +55,17 @@ const Navbar = () => {
 
               <div className='group relative'>
                   <Link to={"/login"}><img src={assets.profile_icon} className='w-5 cursor-pointer' alt='profie-icon'></img></Link>
-                  <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
+                  {/* its a dropdown menu */}
+                  {token &&
+                     <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
                        <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
                           <p className='cursor-pointer hover:text-black'>My Profile</p>
-                          <p className='cursor-pointer hover:text-black'>Orders</p>
-                          <p className='cursor-pointer hover:text-black'>Logout</p>
+                          <p onClick={()=>{navigate("/orders")}} className='cursor-pointer hover:text-black'>Orders</p>
+                          <p onClick={()=>{logout()}} className='cursor-pointer hover:text-black'>Logout</p>
                        </div>
                   </div>
+                  }
+                 
               </div>
               <Link to='/cart' className='relative'>
                  <img src={assets.cart_icon} className='w-5 min-w-5' alt='Cart-icon'></img>

@@ -30,8 +30,10 @@ const List = () => {
       let response = await axios.post(`${backend}/api/product/remove`,{id},{withCredentials:true})
 
       if(response.data.success){
-        toast.success(response.data.message)
+        toast.success("removed")
         await fetchList()
+      }else{
+        toast.error(response.data.message)
       }
     } catch (error) {
         console.log(error)
@@ -68,7 +70,7 @@ const List = () => {
                <p>{item.name}</p>
                <p>{item.category}</p>
                <p>{currency}{item.price}</p>
-               <p onClick={removeproduct(item._id)} className='text-right md:text-center cursor-pointer text-lg'>X</p>
+               <p onClick={()=>removeproduct(item._id)} className='text-right md:text-center cursor-pointer text-lg'>X</p>
             </div>
             </>
           ))

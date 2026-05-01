@@ -25,7 +25,7 @@ const Cart = () => {
          }
       }
       setCartData(tempdata)
-  },[cartitems])
+  },[cartitems,products])
   return (
     <>
     <div className='border-t pt-14'>
@@ -41,7 +41,7 @@ const Cart = () => {
                  <>
                    <div key={index} className='py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'>
                       <div className='flex items-start gap-6'>
-                          <img className='w-16 sm:w-20' src={ProductData.image[0]} alt=''/>
+                          <img className='w-16 sm:w-20' src={ProductData.images[0]} alt=''/>
                           <div>
                               <p className='text-xs sm:text-lg font-median'>{ProductData.name}</p>
                               <div className='flex items-center gap-5 mt-2'>

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import { products } from "../context/assets/frontend_assets/assets";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
 
 export const ShopContext = createContext()
 
@@ -9,9 +9,13 @@ export const ShopContext = createContext()
 
     const currency = '$'
     const delivery_fee = 10
+    const backend = process.env.REACT_APP_BACKEND_URL
     const [search,setSearch] = useState('')
     const [showSearch,setShowSearch] = useState(false)
     const [cartitems,setCartitems] = useState({});
+    const [products,setProducts] = useState([])
+    const [token,setToken] = useState(false)
+
     const navigate = useNavigate()
 
     const addtoCart = async (itemId,size)=>{
@@ -75,12 +79,48 @@ export const ShopContext = createContext()
      return totalAmount
    }
 
+   const getProductData = async()=>{
+    try {
+        let response = await axios.get(`${backend}/api/product/list`)
+        if(response.data.success){
+            setProducts(response.data.products)
+            console.log(response.data.products)
+        }else{
+            toast.error(response.data.error)
+        }
+    } catch (error) {
+        console.log(error)
+        toast.error("server error")
+    }
+   }
+
+   const authcheck = async()=>{
+    try {
+        let response = await axios.get(`${backend}/api/user/authuser`,{withCredentials:true})
+        if(response.data.success){
+            setToken(true)
+        }
+           
+    } catch (error) {
+         console.log(error)
+    }
+   }
+
+   let check = async()=>{
+     let response = await axios.post(`${backend}/api/cart/add`,{},{withCredentials:true})
+   }
+
+   useEffect(()=>{
+       getProductData()
+       authcheck()
+       check()
+   },[])
     
     const value = {
-         products , delivery_fee , currency,
+         products, delivery_fee , currency,
          search,setSearch,showSearch,setShowSearch,
-         cartitems,addtoCart,getCartCount,updateQuantity,
-         getCartAmount,navigate 
+         cartitems,setCartitems,addtoCart,getCartCount,updateQuantity,
+         getCartAmount,navigate,backend,token,setToken
     }
 
     return(

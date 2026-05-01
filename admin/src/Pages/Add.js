@@ -39,7 +39,7 @@ const Add = () => {
     image3 && formData.append("image3",image3)
     image4 && formData.append("image4",image4)
    
-    const response = await axios.post( backend + "/api/product/add",formData)
+    const response = await axios.post( backend + "/api/product/add",formData,{withCredentials:true})
 
     if(response.data.success){
       toast.success(response.data.message)
@@ -52,6 +52,7 @@ const Add = () => {
       setPrice('')
     }else{
       toast.error(response.data.message)
+      console.log(response.data)
     }
 
   } catch (error) {
@@ -115,7 +116,7 @@ const Add = () => {
              <select onChange={(e)=>setSubCategory(e.target.value)} className='w-full max-w-[200px] px-3 py-2'>
                 <option value="Topwear">Topwear</option>
                 <option value="Bottomwear">Bottomwear</option>
-                <option value="winter">Kids</option>
+                <option value="winter">Winterwear</option>
              </select>
            </div>
 

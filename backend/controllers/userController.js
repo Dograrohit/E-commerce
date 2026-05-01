@@ -20,10 +20,12 @@ const loginUser = async (req,res) =>{
         const token = jwt.sign({
             userid:user._id,
             email:user.email,
-            username:user.name
+            name:user.name
         },process.env.JWT_SECRET)
 
-        return res.status(200).json({success:true,token})
+        res.cookie("token",token,{httpOnly:true,secure:false,sameSite:"lax"})
+
+        return res.status(200).json({success:true,token,message:"Login Successfull"})
      }else{
         return res.status(400).json({success:false,message:"Email or Password is not correct"})
      }
@@ -66,12 +68,12 @@ const registerUser = async (req,res) =>{
         const token = jwt.sign({
             userid:newUser._id,
             email:newUser.email,
-            username:newUser.name
+            name:newUser.name
         },process.env.JWT_SECRET)
+ 
+        res.cookie("token",token,{httpOnly:true,secure:false,sameSite:"lax"})
 
-
-
-        res.json({success:true,token})
+        res.json({success:true,token,message:"Successfully Register"})
 
      } catch (error) {
         console.log(error)
@@ -87,8 +89,8 @@ const adminLogin = async (req,res) =>{
          const{email,password} = req.body
 
          if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
-            const token = jwt.sign(email+password,process.env.JWT_SECRET)
-            res.cookie("token",token,{httpOnly:true,secure:false,sameSite:"lax"})
+            const token = jwt.sign({email,password},process.env.JWT_SECRET)
+            res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"lax"})
             res.status(200).json({success:true,token})
          }else{
             res.status(500).json({success:false,message:"Invalid Credantials"})
@@ -111,6 +113,14 @@ const auth = async (req,res)=>{
    }
 }
 
+const authuser = async(req,res)=>{
+   try {
+      res.json({success:true,message:"authenticated"})
+   } catch (error) {
+      return res.status(500).json({message:"server Error"})
+   }
+}
+
 const logout = async(req,res)=>{
    try {
       res.clearCookie("token",{
@@ -118,11 +128,11 @@ const logout = async(req,res)=>{
          sameSite:"lax",
          secure:false
       })
-      res.json({message:"logged out successfull"})
+      res.json({success:true,message:"logged out successfull"})
       console.log("logout")
    } catch (error) {
       return res.status(500).json({message:"server error",error})
    }
 }
 
-module.exports = {loginUser,registerUser,adminLogin,auth,logout}
+module.exports = {loginUser,registerUser,adminLogin,auth,logout,authuser}
