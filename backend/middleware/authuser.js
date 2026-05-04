@@ -11,13 +11,13 @@ const auth = async(req,res,next)=>{
 
         const verify = jwt.verify(token,process.env.JWT_SECRET)
 
-        let user = await userModel.findOne({name:verify.name,email:verify.email})
+        let user = await userModel.findById(verify.userid)
 
         if(!user){
             return res.json({success:false,message:"User not found"})
         }
         
-        req.user = user
+        req.user = {userid:user._id,name:user.name}
 
         next()
 

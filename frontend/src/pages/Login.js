@@ -13,7 +13,7 @@ const Login = () => {
   const onSubmitHandler = async (event)=>{
     event.preventDefault()
     try {
-      if(currentState === "Sign up"){
+      if(currentState === "Sign Up"){
          let response = await axios.post(`${backend}/api/user/register`,{name,email,password},{withCredentials:true})
           
            if(response.data.success){
@@ -28,6 +28,8 @@ const Login = () => {
              navigate("/")
              setToken(true)
              toast.success(response.data.message)
+           }else{
+            toast.error("Email or Password is wrong")
            }
       }
     } catch (error) {

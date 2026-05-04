@@ -7,6 +7,7 @@ const userRouter = require("./routes/userRoute")
 const productRouter = require("./routes/productRoute")
 const cookie = require("cookie-parser")
 const cartRouter = require("./routes/cartRoutes")
+const OrderRouter = require("./routes/orderRoutes")
 
 dotenv.config()
 connectDB()
@@ -17,11 +18,12 @@ const app = express()
  
 app.use(express.json());
 app.use(cookie())
-app.use(cors({origin:[process.env.FRONTEND,process.env.ADMIN_PANEL],credentials:true}))
+app.use(cors({origin:[process.env.FRONTEND,process.env.ADMIN_PANEL,"http://10.143.202.135:3000"],credentials:true}))
 
 app.use('/api/user',userRouter)
 app.use('/api/product',productRouter)
 app.use('/api/cart',cartRouter)
+app.use('/api/order',OrderRouter)
 
 app.get("/",(req,res)=>{
     res.send("hello from backend and rohit")

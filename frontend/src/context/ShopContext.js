@@ -36,6 +36,13 @@ export const ShopContext = createContext()
             cartdata[itemId][size] = 1
         }
         setCartitems(cartdata)
+
+        try {
+            let response = await axios.post(`${backend}/api/cart/add`,{itemId,size},{withCredentials:true})
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
     }
 
     const getCartCount = ()=>{
@@ -60,6 +67,16 @@ export const ShopContext = createContext()
       cartData[itemId][size] = quantity;
 
       setCartitems(cartData)
+      try {
+        let response = await axios.post(`${backend}/api/cart/update`,{itemId,size,quantity},{withCredentials:true})
+        if(response.success){
+            toast.success(response.data.message)
+        }
+      } catch (error) {
+        toast.error(error)
+        console.log(error.message)
+      }
+
    }
 
    const getCartAmount = ()=>{
@@ -86,11 +103,11 @@ export const ShopContext = createContext()
             setProducts(response.data.products)
             console.log(response.data.products)
         }else{
-            toast.error(response.data.error)
+            toast.error(response.data.message)
         }
     } catch (error) {
         console.log(error)
-        toast.error("server error")
+        toast.error(error.message)
     }
    }
 
@@ -103,17 +120,26 @@ export const ShopContext = createContext()
            
     } catch (error) {
          console.log(error)
+         toast.error(error.message)
     }
    }
 
-   let check = async()=>{
-     let response = await axios.post(`${backend}/api/cart/add`,{},{withCredentials:true})
+   const getUserCart = async ()=>{
+    try {
+        let response = await axios.post(`${backend}/api/cart/get`,{},{withCredentials:true})
+        if(response.data.success){
+            setCartitems(response.data.cartData)
+        }
+    } catch (error) {
+        console.log(error)
+        toast.error(error.message)
+    }
    }
-
+   
    useEffect(()=>{
        getProductData()
        authcheck()
-       check()
+       getUserCart()
    },[])
     
     const value = {
