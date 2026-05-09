@@ -14,10 +14,12 @@ const Login = ({setAuth}) => {
       try {
         e.preventDefault()
         const response = await axios.post(`${backend}/api/user/admin`,{email,password},{withCredentials:true})
-        console.log(response.data)
         if(response.data.success === true){
            setAuth(true)
            Navigate("/add")
+           toast.success(response.data.message)
+        }else{
+          toast(response.data.message)
         }
       } catch (error) {
         console.log(error)

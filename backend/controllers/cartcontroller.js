@@ -5,7 +5,6 @@ const addtoCart = async(req,res)=>{
     try {
         const {userid,name} = req.user
         const {itemId,size} = req.body
-        console.log("userid",userid)
 
         const userdata = await userModel.findById(userid)
         let cartData = await userdata.cartData
@@ -27,7 +26,7 @@ const addtoCart = async(req,res)=>{
 
         await userModel.findByIdAndUpdate(userid,{cartData})
 
-    res.json({success:true,message:"Add to Cart",userid,itemId,size})
+    res.json({success:true,message:"Add to Cart"})
     } catch (error) {
         console.log(error)
         res.json({success:false,message:error})

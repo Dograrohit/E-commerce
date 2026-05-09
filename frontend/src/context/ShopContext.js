@@ -7,7 +7,7 @@ export const ShopContext = createContext()
 
  const ShopContextProvider = (props)=>{
 
-    const currency = '$'
+    const currency = '₹'
     const delivery_fee = 10
     const backend = process.env.REACT_APP_BACKEND_URL
     const [search,setSearch] = useState('')
@@ -101,7 +101,6 @@ export const ShopContext = createContext()
         let response = await axios.get(`${backend}/api/product/list`)
         if(response.data.success){
             setProducts(response.data.products)
-            console.log(response.data.products)
         }else{
             toast.error(response.data.message)
         }

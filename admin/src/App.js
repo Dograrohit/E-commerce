@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
 export const backend = process.env.REACT_APP_BACKEND_URL
-export const currency = "$"
+export const currency = "₹"
 
 function App() {
 
@@ -20,8 +20,11 @@ function App() {
   let check = async()=>{
     try {
       let get = await axios.get(`${backend}/api/user/auth`,{ withCredentials:true })
-      setAuth(get.data.authentication === true)
-      console.log(get.data)
+      if(get.data.authentication === true){
+          setAuth(true)
+          console.log(auth)
+      }
+      
     } catch (error) {
       console.log(error)
       setAuth(false)

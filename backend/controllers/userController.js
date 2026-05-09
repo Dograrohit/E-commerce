@@ -90,16 +90,16 @@ const adminLogin = async (req,res) =>{
          const{email,password} = req.body
 
          if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
-            const token = jwt.sign({email,password},process.env.JWT_SECRET)
-            res.cookie("token",token,{httpOnly:true,secure:true,sameSite:"lax"})
-            res.status(200).json({success:true,token})
+            const token1 = jwt.sign({email,password},process.env.JWT_SECRET)
+            res.cookie("token1",token1,{httpOnly:true,secure:true,sameSite:"lax"})
+            res.status(200).json({success:true,message:"Welcome"})
          }else{
-            res.status(500).json({success:false,message:"Invalid Credantials"})
+            res.json({success:false,message:"Invalid Credantials"})
          }
 
     } catch (error) {
         console.log(error)
-        res.status(500).json({msg:"failed"})
+        res.json({message:"Password or Email is Wrong"})
     }
 
 }

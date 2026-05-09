@@ -40,17 +40,41 @@ const PlaceOrderRozerpay = async(req,res)=>{
 
 // All Orders data for Admin Panel
 const allOrder = async(req,res)=>{
-    
+    try {
+        const orders = await orderModel.find({})
+
+        res.json({success:true,orders})
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error})
+    }
 }
 
 // User Orders data for Frontend
-const userOrder = async(req,res)=>{
+const userOrders = async(req,res)=>{
+   try {
+       const {userid} = req.user
+       const orders = await orderModel.find({userid})
 
+       res.json({success:true,orders:orders})
+   } catch (error) {
+       console.log(error)
+       res.json({success:false,message:error})
+   }
 }
 
 //update order status from admin panel
 const updateStatus = async(req,res)=>{
+    try {
+        const {orderid,status} = req.body
 
+        await orderModel.findByIdAndUpdate(orderid,{status})
+
+        res.json({success:true,message:"Updated"})
+    } catch (error) {
+        console.log(error)
+        res.json({success:false,message:error.message})
+    }
 }
 
-module.exports = {PlaceOrder,PlaceOrderRozerpay,PlaceOrderStripe,allOrder,userOrder,updateStatus}
+module.exports = {PlaceOrder,PlaceOrderRozerpay,PlaceOrderStripe,allOrder,userOrders,updateStatus}

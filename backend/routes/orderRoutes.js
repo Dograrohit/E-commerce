@@ -1,5 +1,5 @@
 const express = require("express")
-const {PlaceOrder,PlaceOrderRozerpay,PlaceOrderStripe,allOrder,userOrder,updateStatus} = require("../controllers/ordercontroller")
+const {PlaceOrder,PlaceOrderRozerpay,PlaceOrderStripe,allOrder,userOrders,updateStatus} = require("../controllers/ordercontroller")
 const adminAuth = require("../middleware/adminAuth")
 const authuser = require("../middleware/authuser")
 
@@ -10,11 +10,11 @@ OrderRouter.post("/list",adminAuth,allOrder)
 OrderRouter.post("/status",adminAuth,updateStatus)
 
 //Payment Method
-OrderRouter.post("place",authuser,PlaceOrder)
-OrderRouter.post("stripe",authuser,PlaceOrderStripe)
-OrderRouter.post("rozerpay",authuser,PlaceOrderRozerpay)
+OrderRouter.post("/place",authuser,PlaceOrder)
+OrderRouter.post("/stripe",authuser,PlaceOrderStripe)
+OrderRouter.post("/rozerpay",authuser,PlaceOrderRozerpay)
 
 //User Feature
-OrderRouter.post("userorders",authuser,userOrder)
+OrderRouter.post("/userorders",authuser,userOrders)
 
 module.exports = OrderRouter
